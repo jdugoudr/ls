@@ -6,7 +6,7 @@
 #    By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/22 13:52:36 by jdugoudr          #+#    #+#              #
-#    Updated: 2019/03/02 19:48:30 by jdugoudr         ###   ########.fr        #
+#    Updated: 2019/03/03 14:35:31 by jdugoudr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,12 +22,13 @@ SRC_DIR = srcs/
 OBJ_DIR = objs/
 SRCS = ft_ls.c \
 	   error.c \
-	   getdata.c \
+	   get_data.c \
 	   parse.c \
-	   ls_utils.c
+	   ls_utils.c \
+	   sort.c \
+	   read_dir.c
 #	   scandir.c \
-#	   print.c \
-#	   sort.c 
+#	   print.c 
 OBJS:= $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 SRCS:= $(addprefix $(SRC_DIR), $(SRCS))
 

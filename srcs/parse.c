@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:55:26 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/02 20:59:51 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/03 16:15:31 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	addflag(short *flag, char c)
 		*flag |= T_FLAG;
 }
 
-static int	getflag(short *flag, int ac, char **av)
+static int	get_flag(short *flag, int ac, char **av)
 {
 	int	i;
 	int	j;
@@ -64,44 +64,49 @@ static int	getflag(short *flag, int ac, char **av)
 	return (i);
 }
 
-static void	getfile(t_files **file, t_params **dir, int ac, char **av)
+static int	get_file(char *name, struct stat *st, short flag)
 {
-	struct stat	st;
-	int			i;
+	int	r;
 
-	i = 0;
-	while (i < ac)
+	r = 0;
+	errno = 0;
+	if (flag & L_FLAG)
+		r = lstat(name, st);
+	else
+		r = stat(name, st);
+	if (r == -1)
 	{
-		errno = 0;
-		if (lstat(av[i], &st) == -1)
-		{
-			if (errno == ENOENT)
-				ft_fprintf(STRERR, "ls: %s: %s\n", av[i], strerror(errno));
-			else
-			{
-				free(*dir);
-				error_ls(*file);
-			}
-		}
-		else if (split_difi(file, dir, av[i], st))
-		{
-			free(*dir);
-			error_ls(*file);
-		}
-		i++;
+		if (errno == ENOENT)
+			ft_fprintf(STRERR, "ls: %s: %s\n", name, strerror(errno));
+		else
+			return (1);
+		return (-1);
 	}
+	return (0);
 }
 
 short	parse(t_files **file, t_params **dir, int ac, char **av)
 {
-	int		i;
-	short	flag;
+	int			i;
+	int			r;
+	short		flag;
+	struct stat	st;
 
 	flag = 0;
 	i = 0;
-	if (ac == 0 || (i = getflag(&flag, ac, av)) == ac)
+	if (ac == 0 || (i = get_flag(&flag, ac, av)) == ac)
 		*dir = no_av();
 	else
-		getfile(file, dir, ac - i, av + i);
+		while (i < ac)
+		{
+			if ((r = get_file(av[i], &st, flag)) == 0)
+				r = split_difi(file, dir, av[i], st);
+			if (r == 1)
+			{
+				free(*dir);
+				error_ls(*file);
+			}
+			i++;
+		}
 	return (flag);
 }
