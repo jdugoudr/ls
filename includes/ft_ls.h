@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:37:14 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 18:57:32 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/03 19:22:47 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,25 +66,27 @@ short			parse(t_files **file, t_params **dir, int ac, char **av);
 /*
  ** utils
 */
-
 t_files			*creat_new_tab(void);
 t_params		*add_params(t_params **old);
 t_files			*add_files(t_files **old, int i);
 int				split_df(t_files **file, t_params **dir,
 				char *name, struct stat st);
 char			*n_from_p(char *path);
+
 /*
  ** error
 */
-
 void			error_ls(t_files *file);
 void			p_error_ls(char c, t_files *file);
 
 /*
  ** sort
 */
-
 t_params		*sort_params_st(t_params *t, short flag);
 t_files			*sort_files_st(t_files *t, short flag);
 
+/*
+ ** print
+*/
+void			print_ls(t_files *file, short flag);
 #endif

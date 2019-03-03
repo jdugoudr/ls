@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:46:45 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 18:44:26 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/03 20:14:14 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,27 +21,26 @@ static void	read_params(t_params *p, t_files *file, short flag)
 	i = 0;
 	if (!p)
 		return ;
+	if (file[0].is_last)
+		ft_printf("\n");
 	while (p[i].is_last)
 	{
-		ft_printf("%s\n", p[i].name);
+		if (i == 0 && p[1].is_last)
+			ft_printf("%s:\n", p[i].name);
+		else if (p[1].is_last)
+			ft_printf("\n%s:\n", p[i].name);
 		if (read_dir(creat_new_tab(), ft_strjoin(p[i].name, "/"), flag) == 1)
 			error_ls(file);
 		i++;
 	}
 }
 
-static void	printfiles(t_files *f)
+static void	print_files(t_files *f, short flag)
 {
-	int	i;
-
-	i = 0;
 	if (!f)
 		return ;
-	while (f[i].is_last)
-	{
-		ft_printf("%s\n", f[i].name);
-		i++;
-	}
+	flag |= A_FLAG;
+	print_ls(f, flag);
 }
 
 int			main(int ac, char **av)
@@ -57,7 +56,7 @@ int			main(int ac, char **av)
 	flag = parse(&fileparams, &dirparams, ac - 1, av + 1);
 	fileparams = sort_files_st(fileparams, flag);
 	dirparams = sort_params_st(dirparams, flag);
-	printfiles(fileparams);
+	print_files(fileparams, flag);
 	read_params(dirparams, fileparams, flag);
 	free(fileparams);
 	free(dirparams);

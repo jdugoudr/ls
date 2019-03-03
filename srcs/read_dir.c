@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 13:31:06 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 18:51:56 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/03 20:13:56 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,9 @@ static int	for_recursive(t_files *file, char *path, short flag)
 				return (1);
 			new_path = ft_strcpy(new_path, path);
 			new_path = ft_strcat(new_path, file[i].name);
+			ft_printf("\n%s:\n", new_path);
 			new_path = ft_strcat(new_path, "/");
-			if (read_dir(creat_new_tab(), new_path, flag))
+			if (read_dir(creat_new_tab(), new_path, flag) == 1)
 				return (1);
 		}
 		i++;
@@ -83,12 +84,17 @@ int			read_dir(t_files *file, char *path, short flag)
 	if (!file)
 		return (1);
 	if ((i = open_dir(path, &dir)) != 0)
+	{
+		free(file);
+		file = NULL;
+		free(path);
 		return (i);
+	}
 	while ((cont_dir = readdir(dir)) != NULL)
 		if (get_stat(&file, path, cont_dir->d_name, i++))
 			error_ls(file);
 	file = sort_files_st(file, flag);
-	print_de_test(file);////////////
+	print_ls(file, flag);
 	if (flag & RR_FLAG)
 		i = for_recursive(file, path, flag);
 	free(path);
