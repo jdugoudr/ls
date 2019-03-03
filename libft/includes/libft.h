@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 09:49:12 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/01 16:04:43 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/03 18:57:46 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <string.h>
 # include <stdlib.h>
 # include "includes_printf/ft_printf.h"
-#include "get_next_line.h"
+# include "get_next_line.h"
 
 # define MY_INT_MAX 2147483647
 # define MY_INT_MIN -2147483648

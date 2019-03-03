@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 13:31:06 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 17:37:19 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/03 18:51:56 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <dirent.h>
 #include <errno.h>
 
-static void print_de_test(t_files *t)
+static void	print_de_test(t_files *t)
 {
 	int	i;
 
@@ -36,7 +36,7 @@ static int	open_dir(char *path, DIR **dir)
 	{
 		if (errno == EACCES || errno == EBADF || errno == ENOTDIR)
 		{
-			ft_fprintf(STRERR, "ls: %s: %s\n", name_from_path(path), strerror(errno));
+			ft_fprintf(STRERR, "ls: %s: %s\n", n_from_p(path), strerror(errno));
 			return (-1);
 		}
 		else
@@ -60,21 +60,22 @@ static int	for_recursive(t_files *file, char *path, short flag)
 		{
 			len_path = ft_strlen(path);
 			len_name = ft_strlen(file[i].name);
-			new_path = malloc((len_path + len_name + 2) * sizeof(char));///////
+			if (!(new_path = malloc((len_path + len_name + 2) * sizeof(char))))
+				return (1);
 			new_path = ft_strcpy(new_path, path);
 			new_path = ft_strcat(new_path, file[i].name);
 			new_path = ft_strcat(new_path, "/");
-			ft_printf("\n\n for recursive quel est le path ??? %s \n\n", new_path);
-			read_dir(creat_new_tab(), new_path, flag);
+			if (read_dir(creat_new_tab(), new_path, flag))
+				return (1);
 		}
 		i++;
 	}
 	return (0);
 }
 
-int	read_dir(t_files *file, char *path, short flag)
+int			read_dir(t_files *file, char *path, short flag)
 {
-	DIR 			*dir;
+	DIR				*dir;
 	struct dirent	*cont_dir;
 	int				i;
 	char			*new_path;
@@ -84,18 +85,14 @@ int	read_dir(t_files *file, char *path, short flag)
 	if ((i = open_dir(path, &dir)) != 0)
 		return (i);
 	while ((cont_dir = readdir(dir)) != NULL)
-	{
-		get_stat(&file, path, cont_dir->d_name, i++);//////a proteger
-	}
+		if (get_stat(&file, path, cont_dir->d_name, i++))
+			error_ls(file);
 	file = sort_files_st(file, flag);
 	print_de_test(file);////////////
-	i = 0;
 	if (flag & RR_FLAG)
-	{
-		for_recursive(file, path, flag);//////////a protoger
-	}
+		i = for_recursive(file, path, flag);
 	free(path);
 	free(file);
 	closedir(dir);
-	return (0);
+	return (i);
 }

@@ -6,14 +6,14 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:55:26 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 16:15:31 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/03 18:51:09 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include "errno.h"
 
-static t_params	*no_av()
+static t_params	*no_av(void)
 {
 	t_params *p;
 
@@ -24,7 +24,7 @@ static t_params	*no_av()
 	return (p);
 }
 
-static void	addflag(short *flag, char c)
+static void		addflag(short *flag, char c)
 {
 	if (c == 'l')
 		*flag |= L_FLAG;
@@ -38,7 +38,7 @@ static void	addflag(short *flag, char c)
 		*flag |= T_FLAG;
 }
 
-static int	get_flag(short *flag, int ac, char **av)
+static int		get_flag(short *flag, int ac, char **av)
 {
 	int	i;
 	int	j;
@@ -49,7 +49,7 @@ static int	get_flag(short *flag, int ac, char **av)
 	{
 		if (av[i][0] != '-' || (av[i][0] == '-' && av[i][1] == '\0') ||
 					!ft_strcmp(av[i], "--"))
-			break;
+			break ;
 		while (av[i][j] != '\0')
 		{
 			j++;
@@ -64,7 +64,7 @@ static int	get_flag(short *flag, int ac, char **av)
 	return (i);
 }
 
-static int	get_file(char *name, struct stat *st, short flag)
+static int		get_file(char *name, struct stat *st, short flag)
 {
 	int	r;
 
@@ -85,7 +85,7 @@ static int	get_file(char *name, struct stat *st, short flag)
 	return (0);
 }
 
-short	parse(t_files **file, t_params **dir, int ac, char **av)
+short			parse(t_files **file, t_params **dir, int ac, char **av)
 {
 	int			i;
 	int			r;
@@ -100,7 +100,7 @@ short	parse(t_files **file, t_params **dir, int ac, char **av)
 		while (i < ac)
 		{
 			if ((r = get_file(av[i], &st, flag)) == 0)
-				r = split_difi(file, dir, av[i], st);
+				r = split_df(file, dir, av[i], st);
 			if (r == 1)
 			{
 				free(*dir);

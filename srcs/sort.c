@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 10:55:33 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 17:11:35 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/03 18:54:47 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
  ** We sort params array by time if flag t is present
  ** or by name if it's not.
 */
+
 static t_params	*sort_rev_params(t_params *t, short flag)
 {
 	t_params	tmp;
@@ -41,7 +42,7 @@ static t_params	*sort_rev_params(t_params *t, short flag)
 	return (t);
 }
 
-t_params	*sort_params_st(t_params *t, short flag)
+t_params		*sort_params_st(t_params *t, short flag)
 {
 	t_params	tmp;
 	int			i;
@@ -70,7 +71,7 @@ t_params	*sort_params_st(t_params *t, short flag)
 	return (t);
 }
 
-static t_files		*sort_rev_files(t_files *t, short flag)
+static t_files	*sort_rev_files(t_files *t, short flag)
 {
 	t_files	tmp;
 	int		i;
@@ -95,7 +96,7 @@ static t_files		*sort_rev_files(t_files *t, short flag)
 	return (t);
 }
 
-t_files		*sort_files_st(t_files *t, short flag)
+t_files			*sort_files_st(t_files *t, short flag)
 {
 	t_files	tmp;
 	int		i;

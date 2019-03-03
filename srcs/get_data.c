@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 19:24:08 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 17:13:42 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/03 18:45:19 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	get_data(t_files *file, struct stat st)
 		file->type = 's';
 	else if ((st.st_mode & S_IFMT) == S_IFIFO)
 		file->type = 'f';
-//	ft_printf("getdata : on as deja le type de fichier mais c'est pas fini\n");
 }
 
 int		new_file(t_files **file, char *name, struct stat st, int nb_file)
