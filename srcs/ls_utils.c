@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 18:19:02 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 15:02:06 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:55:50 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,26 @@ t_files		*creat_new_tab(void)
 	return (new);
 }
 
-int			split_df(t_files **file, t_params **dir, char *name, struct stat st)
+int			split_df(t_files **file, t_params **dir, t_data *dt)
 {
 	static int	nb_dir = 0;
 	static int	nb_file = 0;
 
-	if ((st.st_mode & S_IFMT) == S_IFDIR)
+	if ((dt->st.st_mode & S_IFMT) == S_IFDIR)
 	{
 		if ((nb_dir + 1) % BUFF_PARAMS == 0 || nb_dir == 0)
 			if ((*dir = add_params(dir)) == NULL)
 				return (1);
-		(*dir)[nb_dir].name = name;
-		(*dir)[nb_dir].time = st.st_mtime;
+		(*dir)[nb_dir].name = dt->name;
+		(*dir)[nb_dir].time = dt->st.st_mtime;
 		(*dir)[nb_dir].is_last = 1;
 		(*dir)[nb_dir + 1].is_last = 0;
 		nb_dir++;
 	}
 	else
 	{
-		printf("name :%s\n", name);
-		if (new_file(file, name, st, nb_file))
+		if (new_file(file, dt, &nb_file))
 			return (1);
-		nb_file++;
 	}
 	return (0);
 }

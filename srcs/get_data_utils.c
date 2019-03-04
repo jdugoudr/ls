@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/04 12:29:36 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 14:36:14 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 18:22:57 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,21 @@ void	get_name_user(t_files *file)
 		file->len_gpe = ft_strlen(file->gpe);
 }
 
+static void	still_exec(t_files *file, struct stat st)
+{
+	if ((st.st_mode & S_IXOTH) && (st.st_mode & S_ISVTX))
+		file->p_oth[2] = 't';
+	else if ((st.st_mode & S_IXOTH) == 0 && (st.st_mode & S_ISVTX))
+		file->p_oth[2] = 'T';
+	else if ((st.st_mode & S_IXOTH))
+		file->p_oth[2] = 'x';
+	else
+		file->p_oth[2] = '-';
+	file->p_use[3] = '\0';
+	file->p_gpe[3] = '\0';
+	file->p_oth[3] = '\0';
+}
+
 void	get_exec(t_files *file, struct stat st)
 {
 	if ((st.st_mode & S_IXUSR) && (st.st_mode & S_ISUID) == 0)
@@ -49,15 +64,7 @@ void	get_exec(t_files *file, struct stat st)
 		file->p_gpe[2] = 'S';
 	else
 		file->p_gpe[2] = '-';
-	if ((st.st_mode & S_IXOTH) && (st.st_mode & S_ISVTX))
-		file->p_oth[2] = 't';
-	else if ((st.st_mode & S_IXOTH) == 0 && (st.st_mode & S_ISVTX))
-		file->p_oth[2] = 'T';
-	else
-		file->p_oth[2] = '-';
-	file->p_use[3] = '\0';
-	file->p_gpe[3] = '\0';
-	file->p_oth[3] = '\0';
+	still_exec(file, st);
 }
 
 void	get_perm(t_files *file, struct stat st)

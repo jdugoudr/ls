@@ -6,13 +6,13 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 19:12:31 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 14:00:45 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 21:12:15 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static char	*norm_date(time_t t)
+static char		*norm_date(time_t t)
 {
 	char	*date;
 
@@ -30,7 +30,7 @@ static char	*norm_date(time_t t)
 	return (date + 11);
 }
 
-static void	print_all(t_files f, size_t *tab_max)
+static void		print_all(t_files f, size_t *tab_max)
 {
 	ft_printf("%c%s%s%s%c", f.type, f.p_use, f.p_gpe, f.p_oth, ' ');
 	ft_printf(" %*hu", (int)tab_max[0], f.nlink);
@@ -44,20 +44,26 @@ static void	print_all(t_files f, size_t *tab_max)
 		ft_printf("  %-*d", (int)tab_max[2], f.gpe);
 	ft_printf("  %*d", (int)tab_max[3], f.size);
 	ft_printf("%s", norm_date(f.time));
-	ft_printf(" %s\n", f.name);
+	if (f.type == 'l')
+		ft_printf(" %s -> %s\n", f.name, f.name_link);
+	else
+		ft_printf(" %s\n", f.name);
 }
 
-static void	take_bigger(size_t *tab_max, t_files *file)
+off_t	take_bigger(size_t *tab_max, t_files *file)
 {
-	int	i;
+	int		i;
+	off_t	total;
 
 	i = 0;
 	tab_max[0] = 0;
 	tab_max[1] = 0;
 	tab_max[2] = 0;
 	tab_max[3] = 0;
+	total = 0;
 	while (file[i].is_last)
 	{
+		total += file[i].blocks;
 		if (file[i].len_link > tab_max[0])
 			tab_max[0] = file[i].len_link;
 		if (file[i].len_user > tab_max[1])
@@ -68,25 +74,28 @@ static void	take_bigger(size_t *tab_max, t_files *file)
 			tab_max[3] = file[i].len_size;
 		i++;
 	}
+	return (total);
 }
 
-void		print_ls(t_files *file, short flag)
+void			print_ls(t_files *file, short flag, int do_total)
 {
 	int		i;
 	size_t	tab_max[4];
+	off_t	total;
 
 	i = 0;
-	take_bigger(tab_max, file);
+	if ((flag & L_FLAG))
+	{
+		total = take_bigger(tab_max, file);
+		if (do_total == DO_TOTAL)
+			ft_printf("total %lu\n", total);
+	}
 	while (file[i].is_last)
 	{
-		if ((file[i].name[0] == '.' && (flag & A_FLAG)) ||
-				file[i].name[0] != '.')
-		{
-			if ((flag & L_FLAG))
-				print_all(file[i], tab_max);
-			else
-				ft_printf("%s\n", file[i].name);
-		}
+		if ((flag & L_FLAG))
+			print_all(file[i], tab_max);
+		else
+			ft_printf("%s\n", file[i].name);
 		i++;
 	}
 }

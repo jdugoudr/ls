@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:46:45 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 09:05:43 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 18:42:51 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	read_params(t_params *p, t_files *file, short flag)
 		ft_printf("\n");
 	while (p[i].is_last)
 	{
-		if (i == 0 && p[1].is_last)
+		if (i == 0 && (p[1].is_last || file[0].is_last))
 			ft_printf("%s:\n", p[i].name);
 		else if (p[1].is_last)
 			ft_printf("\n%s:\n", p[i].name);
@@ -40,7 +40,7 @@ static void	print_files(t_files *f, short flag)
 	if (!f)
 		return ;
 	flag |= A_FLAG;
-	print_ls(f, flag);
+	print_ls(f, flag, NO_TOTAL);
 }
 
 int			main(int ac, char **av)

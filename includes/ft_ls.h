@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:37:14 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 14:01:20 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 21:12:16 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,16 @@
 # define RR_FLAG		0x10
 
 # define BUFF_PARAMS	10
-# define BUFF_FILES		250
+# define BUFF_FILES		350
 
 # define SIXMONTHS		((365 / 2) * 86400)
+# define DO_TOTAL		1
+# define NO_TOTAL		0
 
 typedef struct	s_files
 {
 	char		name[256];
+	char		name_link[256];
 	time_t		time;
 	char		type;
 	nlink_t		nlink;
@@ -56,6 +59,7 @@ typedef struct	s_files
 	size_t		len_gpe;
 	uid_t		uid;
 	gid_t		gid;
+	blkcnt_t	blocks;
 	int			is_last;
 }				t_files;
 
@@ -66,9 +70,15 @@ typedef struct	s_params
 	int			is_last;
 }				t_params;
 
-int				new_file(t_files **file, char *name, struct stat st,
-		int nb_file);
-int				get_stat(t_files **file, char *path, char *name, int nb_file);
+typedef struct	s_data
+{
+	char		*name;
+	struct stat	st;
+	short		flag;
+}				t_data;
+
+int				new_file(t_files **file, t_data *dt, int *nb_file);
+int				get_stat(t_files **file, char *path, t_data *dt, int *nb_file);
 int				read_dir(t_files *file, char *path, short flag);
 short			parse(t_files **file, t_params **dir, int ac, char **av);
 
@@ -78,8 +88,7 @@ short			parse(t_files **file, t_params **dir, int ac, char **av);
 t_files			*creat_new_tab(void);
 t_params		*add_params(t_params **old);
 t_files			*add_files(t_files **old, int i);
-int				split_df(t_files **file, t_params **dir,
-				char *name, struct stat st);
+int				split_df(t_files **file, t_params **dir, t_data *dt);
 char			*n_from_p(char *path);
 
 /*
@@ -97,7 +106,10 @@ t_files			*sort_files_st(t_files *t, short flag);
 /*
  ** print
 */
-void			print_ls(t_files *file, short flag);
+//void			print_ls(t_files *file, short flag);
+void			print_ls(t_files *file, short flag, int do_total);
+//void			print_all(t_files f, size_t *tab_max);
+off_t			take_bigger(size_t *tab_max, t_files *file);
 
 /*
  ** get_data_utils

@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 13:31:06 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 09:41:32 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 18:42:39 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,10 @@ int			read_dir(t_files *file, char *path, short flag)
 	DIR				*dir;
 	struct dirent	*cont_dir;
 	int				i;
-	char			*new_path;
+	t_data			dt;
+	int				nb_file;
 
+	nb_file = 0;
 	if (!file)
 		return (1);
 	if ((i = open_dir(path, &dir)) != 0)
@@ -91,10 +93,14 @@ int			read_dir(t_files *file, char *path, short flag)
 		return (i);
 	}
 	while ((cont_dir = readdir(dir)) != NULL)
-		if (get_stat(&file, path, cont_dir->d_name, i++))
+	{
+		dt.name = cont_dir->d_name;
+		dt.flag = flag;
+		if (get_stat(&file, path, &dt, &nb_file))
 			error_ls(file);
+	}
 	file = sort_files_st(file, flag);
-	print_ls(file, flag);
+	print_ls(file, flag, DO_TOTAL);
 	if (flag & RR_FLAG)
 		i = for_recursive(file, path, flag);
 	free(path);

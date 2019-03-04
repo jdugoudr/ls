@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:55:26 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 15:16:02 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 20:27:50 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static int		get_flag(short *flag, int ac, char **av)
 				p_error_ls(av[i][j], NULL);
 			addflag(flag, av[i][j]);
 		}
+		j = 0;
 		i++;
 	}
 	if (i < ac && !ft_strcmp(av[i], "--"))
@@ -92,6 +93,7 @@ short			parse(t_files **file, t_params **dir, int ac, char **av)
 	int			r;
 	short		flag;
 	struct stat	st;
+	t_data		dt;
 
 	flag = 0;
 	i = 0;
@@ -101,7 +103,12 @@ short			parse(t_files **file, t_params **dir, int ac, char **av)
 		while (i < ac)
 		{
 			if ((r = get_file(av[i], &st, flag)) == 0)
-				r = split_df(file, dir, av[i], st);
+			{
+				dt.name = av[i];
+				dt.st = st;
+				dt.flag = flag;
+				r = split_df(file, dir, &dt);
+			}
 			if (r == 1)
 			{
 				free(*dir);
