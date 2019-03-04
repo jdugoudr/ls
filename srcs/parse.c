@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:55:26 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 18:51:09 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 15:16:02 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ static t_params	*no_av(void)
 {
 	t_params *p;
 
-	if ((p = (t_params *)malloc(1 * sizeof(t_params))) == NULL)
+	if ((p = (t_params *)malloc(2 * sizeof(t_params))) == NULL)
 		error_ls(NULL);
 	p[0].name = ".";
-	p[0].is_last = 0;
+	p[0].is_last = 1;
+	p[1].is_last = 0;
 	return (p);
 }
 

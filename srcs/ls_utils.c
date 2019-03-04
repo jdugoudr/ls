@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 18:19:02 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 18:49:38 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 15:02:06 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int			split_df(t_files **file, t_params **dir, char *name, struct stat st)
 	}
 	else
 	{
+		printf("name :%s\n", name);
 		if (new_file(file, name, st, nb_file))
 			return (1);
 		nb_file++;
