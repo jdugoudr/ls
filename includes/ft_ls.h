@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:37:14 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/03 19:22:47 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/04 14:01:20 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,24 @@
 # define BUFF_PARAMS	10
 # define BUFF_FILES		250
 
+# define SIXMONTHS		((365 / 2) * 86400)
+
 typedef struct	s_files
 {
 	char		name[256];
 	time_t		time;
 	char		type;
 	nlink_t		nlink;
+	size_t		len_link;
+	off_t		size;
+	size_t		len_size;
+	char		p_use[4];
+	char		p_gpe[4];
+	char		p_oth[4];
 	char		*user;
+	size_t		len_user;
 	char		*gpe;
+	size_t		len_gpe;
 	uid_t		uid;
 	gid_t		gid;
 	int			is_last;
@@ -56,7 +66,6 @@ typedef struct	s_params
 	int			is_last;
 }				t_params;
 
-void			get_data(t_files *file, struct stat st);
 int				new_file(t_files **file, char *name, struct stat st,
 		int nb_file);
 int				get_stat(t_files **file, char *path, char *name, int nb_file);
@@ -89,4 +98,12 @@ t_files			*sort_files_st(t_files *t, short flag);
  ** print
 */
 void			print_ls(t_files *file, short flag);
+
+/*
+ ** get_data_utils
+*/
+void			get_name_user(t_files *file);
+void			get_exec(t_files *file, struct stat st);
+void			get_perm(t_files *file, struct stat st);
+
 #endif

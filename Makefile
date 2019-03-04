@@ -6,7 +6,7 @@
 #    By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/22 13:52:36 by jdugoudr          #+#    #+#              #
-#    Updated: 2019/03/03 19:21:49 by jdugoudr         ###   ########.fr        #
+#    Updated: 2019/03/04 12:48:59 by jdugoudr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ OBJ_DIR = objs/
 SRCS = ft_ls.c \
 	   error.c \
 	   get_data.c \
+	   get_data_utils.c \
 	   parse.c \
 	   ls_utils.c \
 	   sort.c \
