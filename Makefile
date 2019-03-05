@@ -6,7 +6,7 @@
 #    By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/22 13:52:36 by jdugoudr          #+#    #+#              #
-#    Updated: 2019/03/05 19:41:55 by jdugoudr         ###   ########.fr        #
+#    Updated: 2019/03/05 19:45:19 by jdugoudr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,9 +33,9 @@ SRCS = ft_ls.c \
 OBJS:= $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 SRCS:= $(addprefix $(SRC_DIR), $(SRCS))
 
-all: libft $(NAME)
+all: $(NAME)
 
-$(NAME): $(OBJ_DIR) $(OBJS) $(LIB_FT)
+$(NAME): libft $(OBJ_DIR) $(OBJS) $(LIB_FT)
 	@$(CC) -o $@ $(OBJS) $(LIB_FT) -I $(HEADERS) -I $(LIB_HEAD)
 
 libft:
