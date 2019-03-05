@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 13:31:06 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 14:33:48 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 17:32:40 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	for_recursive(t_files *file, char *path, short flag)
 	return (0);
 }
 
-static int	read_utils(t_files *file, char *path, short flag, DIR *dir)
+static int	read_utils(t_files **file, char *path, short flag, DIR *dir)
 {
 	t_data			dt;
 	int				nb_file;
@@ -86,9 +86,8 @@ static int	read_utils(t_files *file, char *path, short flag, DIR *dir)
 	{
 		dt.name = cont_dir->d_name;
 		dt.flag = flag;
-		r = get_stat(&file, path, &dt, &nb_file);
-		if (r == 1)
-			error_ls(file);
+		if ((r = get_stat(file, path, &dt, &nb_file)) == 1)
+			error_ls(*file);
 		else if (r == -1)
 			break ;
 	}
@@ -109,7 +108,7 @@ int			read_dir(t_files *file, char *path, short flag)
 		free(path);
 		return (i);
 	}
-	if ((i = read_utils(file, path, flag, dir)) == 0)
+	if ((i = read_utils(&file, path, flag, dir)) == 0)
 	{
 		if (file || file[0].is_last)
 			file = sort_files_st(file, flag);
