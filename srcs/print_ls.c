@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 19:12:31 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 13:52:02 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 15:12:17 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,30 +56,12 @@ static void		print_all(t_files f, size_t *tab_max)
 		ft_printf(" %s\n", f.name);
 }
 
-off_t			take_bigger(size_t *tab_max, t_files *file)
+static void		init(size_t *tab_max)
 {
-	int		i;
-	off_t	total;
-
-	i = 0;
-	total = 0;
-	while (file[i].is_last)
-	{
-		total += file[i].blocks;
-		if (file[i].len_link > tab_max[0])
-			tab_max[0] = file[i].len_link;
-		if (file[i].len_user > tab_max[1])
-			tab_max[1] = file[i].len_user;
-		if (file[i].len_gpe > tab_max[2])
-			tab_max[2] = file[i].len_gpe;
-		if (file[i].type != 'c' && file[i].type != 'b' &&
-				file[i].len_size > tab_max[3])
-			tab_max[3] = file[i].len_size;
-		else if ((file[i].type == 'c' || file[i].type == 'b') && 8 > tab_max[3])
-			tab_max[3] = 8;
-		i++;
-	}
-	return (total);
+	tab_max[0] = 0;
+	tab_max[1] = 0;
+	tab_max[2] = 0;
+	tab_max[3] = 0;
 }
 
 void			print_ls(t_files *file, short flag, int do_total)
@@ -87,12 +69,12 @@ void			print_ls(t_files *file, short flag, int do_total)
 	int		i;
 	size_t	tab_max[4];
 	off_t	total;
+	ino_t	max_i;
 
 	i = 0;
-	tab_max[0] = 0;
-	tab_max[1] = 0;
-	tab_max[2] = 0;
-	tab_max[3] = 0;
+	init(tab_max);
+	if ((flag & I_FLAG))
+		max_i = max_inode(file);
 	if ((flag & L_FLAG) && file[0].is_last)
 	{
 		total = take_bigger(tab_max, file);
@@ -101,6 +83,8 @@ void			print_ls(t_files *file, short flag, int do_total)
 	}
 	while (file[i].is_last)
 	{
+		if ((flag & I_FLAG))
+			ft_printf("%*llu ", max_i, file[i].inode);
 		if ((flag & L_FLAG))
 			print_all(file[i], tab_max);
 		else

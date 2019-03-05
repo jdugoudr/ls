@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:37:14 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 14:35:16 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 15:10:17 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@
 # define STRERR			2
 # define USAGE			"usage: ls [-lartR] [file ...]"
 
-# define FLAGS			"lrRat"
+# define FLAGS			"lrRati"
 # define L_FLAG			0x01
 # define R_FLAG			0x02
 # define A_FLAG			0x04
 # define T_FLAG			0x08
 # define RR_FLAG		0x10
+# define I_FLAG			0x20
 
 # define BUFF_PARAMS	10
 # define BUFF_FILES		350
@@ -47,6 +48,7 @@ typedef struct	s_files
 	time_t		time;
 	char		type;
 	nlink_t		nlink;
+	ino_t		inode;
 	size_t		len_link;
 	off_t		size;
 	size_t		len_size;
@@ -109,6 +111,12 @@ t_files			*sort_files_st(t_files *t, short flag);
  ** print
 */
 void			print_ls(t_files *file, short flag, int do_total);
+off_t			take_bigger(size_t *tab_max, t_files *file);
+
+/*
+ ** print_utils
+*/
+ino_t			max_inode(t_files *file);
 off_t			take_bigger(size_t *tab_max, t_files *file);
 
 /*

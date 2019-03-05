@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 19:24:08 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 13:37:43 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:51:36 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ int			new_file(t_files **file, t_data *dt, int *nb_file, char *path)
 		((*file)[*nb_file]).time = dt->st.st_mtime;
 	if ((dt->flag & L_FLAG))
 		get_data((*file) + *nb_file, dt->st);
+	if ((dt->flag & I_FLAG))
+		(*file)[*nb_file].inode = dt->st.st_ino;
 	*nb_file += 1;
 	return (0);
 }

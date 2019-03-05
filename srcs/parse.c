@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:55:26 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 13:50:12 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:54:37 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static void		addflag(short *flag, char c)
 		*flag |= A_FLAG;
 	else if (c == 't')
 		*flag |= T_FLAG;
+	else if (c == 'i')
+		*flag |= I_FLAG;
 }
 
 static int		get_flag(short *flag, int ac, char **av)
