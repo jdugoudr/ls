@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 19:24:08 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 17:35:25 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 19:10:43 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,17 @@ static void	get_data(t_files *file, struct stat st)
 
 static void	get_type(t_files *file, struct stat st, char *path)
 {
+	char	*tmp;
 	if ((st.st_mode & S_IFMT) == S_IFREG)
 		file->type = '-';
 	else if ((st.st_mode & S_IFMT) == S_IFDIR)
 		file->type = 'd';
 	else if ((st.st_mode & S_IFMT) == S_IFLNK)
 	{
-		readlink(path, file->name_link, 256);
-		file->name_link[st.st_size] = '\0';
+		tmp = ft_strnew(256);
+		readlink(path, tmp, 256);
+		ft_strcpy(file->name_link, tmp);
+		free(tmp);
 		file->type = 'l';
 	}
 	else if ((st.st_mode & S_IFMT) == S_IFCHR)

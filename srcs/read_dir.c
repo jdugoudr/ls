@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 13:31:06 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 17:32:40 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 19:25:25 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static int	open_dir(char *path, DIR **dir)
 static int	for_recursive(t_files *file, char *path, short flag)
 {
 	int		i;
+	int		r;
 	size_t	len_path;
 	size_t	len_name;
 	char	*new_path;
@@ -66,12 +67,12 @@ static int	for_recursive(t_files *file, char *path, short flag)
 			new_path = ft_strcat(new_path, file[i].name);
 			ft_printf("\n%s:\n", new_path);
 			new_path = ft_strcat(new_path, "/");
-			if (read_dir(creat_new_tab(), new_path, flag) == 1)
+			if ((r += read_dir(creat_new_tab(), new_path, flag)) == 1)
 				return (1);
 		}
 		i++;
 	}
-	return (0);
+	return (r);
 }
 
 static int	read_utils(t_files **file, char *path, short flag, DIR *dir)
@@ -114,7 +115,7 @@ int			read_dir(t_files *file, char *path, short flag)
 			file = sort_files_st(file, flag);
 		print_ls(file, flag, DO_TOTAL);
 		if (flag & RR_FLAG)
-			i = for_recursive(file, path, flag);
+			i += for_recursive(file, path, flag);
 	}
 	free(path);
 	free(file);
