@@ -6,21 +6,25 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/04 12:29:36 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 18:22:57 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 13:39:02 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	get_name_user(t_files *file)
+void		get_name_user(t_files *file)
 {
 	struct passwd	*pwd;
 	struct group	*grp;
 
-	pwd = getpwuid(file->uid);
-	file->user = pwd->pw_name;
-	grp = getgrgid(file->gid);
-	file->gpe = grp->gr_name;
+	if ((pwd = getpwuid(file->uid)))
+		file->user = pwd->pw_name;
+	else
+		file->user = NULL;
+	if ((grp = getgrgid(file->gid)))
+		file->gpe = grp->gr_name;
+	else
+		file->gpe = NULL;
 	if (!file->user)
 		file->len_user = ft_nblen(file->uid);
 	else
@@ -46,7 +50,7 @@ static void	still_exec(t_files *file, struct stat st)
 	file->p_oth[3] = '\0';
 }
 
-void	get_exec(t_files *file, struct stat st)
+void		get_exec(t_files *file, struct stat st)
 {
 	if ((st.st_mode & S_IXUSR) && (st.st_mode & S_ISUID) == 0)
 		file->p_use[2] = 'x';
@@ -67,7 +71,7 @@ void	get_exec(t_files *file, struct stat st)
 	still_exec(file, st);
 }
 
-void	get_perm(t_files *file, struct stat st)
+void		get_perm(t_files *file, struct stat st)
 {
 	if ((st.st_mode & S_IRUSR))
 		file->p_use[0] = 'r';

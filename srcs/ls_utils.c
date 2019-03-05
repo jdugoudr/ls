@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 18:19:02 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 17:55:50 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 09:27:39 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int			split_df(t_files **file, t_params **dir, t_data *dt)
 	}
 	else
 	{
-		if (new_file(file, dt, &nb_file))
+		if (new_file(file, dt, &nb_file, dt->name))
 			return (1);
 	}
 	return (0);

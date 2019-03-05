@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 13:31:06 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 18:42:39 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:33:48 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,32 @@ static int	for_recursive(t_files *file, char *path, short flag)
 	return (0);
 }
 
+static int	read_utils(t_files *file, char *path, short flag, DIR *dir)
+{
+	t_data			dt;
+	int				nb_file;
+	int				r;
+	struct dirent	*cont_dir;
+
+	nb_file = 0;
+	while ((cont_dir = readdir(dir)) != NULL)
+	{
+		dt.name = cont_dir->d_name;
+		dt.flag = flag;
+		r = get_stat(&file, path, &dt, &nb_file);
+		if (r == 1)
+			error_ls(file);
+		else if (r == -1)
+			break ;
+	}
+	return (r);
+}
+
 int			read_dir(t_files *file, char *path, short flag)
 {
 	DIR				*dir;
-	struct dirent	*cont_dir;
 	int				i;
-	t_data			dt;
-	int				nb_file;
 
-	nb_file = 0;
 	if (!file)
 		return (1);
 	if ((i = open_dir(path, &dir)) != 0)
@@ -92,17 +109,14 @@ int			read_dir(t_files *file, char *path, short flag)
 		free(path);
 		return (i);
 	}
-	while ((cont_dir = readdir(dir)) != NULL)
+	if ((i = read_utils(file, path, flag, dir)) == 0)
 	{
-		dt.name = cont_dir->d_name;
-		dt.flag = flag;
-		if (get_stat(&file, path, &dt, &nb_file))
-			error_ls(file);
+		if (file || file[0].is_last)
+			file = sort_files_st(file, flag);
+		print_ls(file, flag, DO_TOTAL);
+		if (flag & RR_FLAG)
+			i = for_recursive(file, path, flag);
 	}
-	file = sort_files_st(file, flag);
-	print_ls(file, flag, DO_TOTAL);
-	if (flag & RR_FLAG)
-		i = for_recursive(file, path, flag);
 	free(path);
 	free(file);
 	closedir(dir);

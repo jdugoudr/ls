@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:37:14 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 21:12:16 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:35:16 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ typedef struct	s_files
 	uid_t		uid;
 	gid_t		gid;
 	blkcnt_t	blocks;
+	int			major;
+	int			minor;
 	int			is_last;
 }				t_files;
 
@@ -77,7 +79,7 @@ typedef struct	s_data
 	short		flag;
 }				t_data;
 
-int				new_file(t_files **file, t_data *dt, int *nb_file);
+int				new_file(t_files **file, t_data *dt, int *nb_file, char *path);
 int				get_stat(t_files **file, char *path, t_data *dt, int *nb_file);
 int				read_dir(t_files *file, char *path, short flag);
 short			parse(t_files **file, t_params **dir, int ac, char **av);
@@ -106,9 +108,7 @@ t_files			*sort_files_st(t_files *t, short flag);
 /*
  ** print
 */
-//void			print_ls(t_files *file, short flag);
 void			print_ls(t_files *file, short flag, int do_total);
-//void			print_all(t_files f, size_t *tab_max);
 off_t			take_bigger(size_t *tab_max, t_files *file);
 
 /*

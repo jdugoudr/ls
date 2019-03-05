@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:46:45 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/04 18:42:51 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:33:50 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int			main(int ac, char **av)
 	if ((fileparams = creat_new_tab()) == NULL)
 		error_ls(NULL);
 	flag = parse(&fileparams, &dirparams, ac - 1, av + 1);
-	fileparams = sort_files_st(fileparams, flag);
+	if (!fileparams || fileparams[0].is_last)
+		fileparams = sort_files_st(fileparams, flag);
 	dirparams = sort_params_st(dirparams, flag);
 	print_files(fileparams, flag);
 	read_params(dirparams, fileparams, flag);
