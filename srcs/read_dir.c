@@ -6,25 +6,13 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 13:31:06 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 19:25:25 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/05 19:41:24 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include <dirent.h>
 #include <errno.h>
-
-static void	print_de_test(t_files *t)
-{
-	int	i;
-
-	i = 0;
-	while (t[i].is_last)
-	{
-		ft_printf("coucou %s c'est -%c-\n", t[i].name, t[i].type);
-		i++;
-	}
-}
 
 static int	open_dir(char *path, DIR **dir)
 {
@@ -45,12 +33,10 @@ static int	open_dir(char *path, DIR **dir)
 	return (0);
 }
 
-static int	for_recursive(t_files *file, char *path, short flag)
+static int	for_recursive(t_files *file, char *path, short flag, int r)
 {
 	int		i;
-	int		r;
 	size_t	len_path;
-	size_t	len_name;
 	char	*new_path;
 
 	i = 0;
@@ -60,8 +46,8 @@ static int	for_recursive(t_files *file, char *path, short flag)
 				ft_strcmp(file[i].name, ".."))
 		{
 			len_path = ft_strlen(path);
-			len_name = ft_strlen(file[i].name);
-			if (!(new_path = malloc((len_path + len_name + 2) * sizeof(char))))
+			len_path += ft_strlen(file[i].name);
+			if (!(new_path = malloc((len_path + 2) * sizeof(char))))
 				return (1);
 			new_path = ft_strcpy(new_path, path);
 			new_path = ft_strcat(new_path, file[i].name);
@@ -115,7 +101,7 @@ int			read_dir(t_files *file, char *path, short flag)
 			file = sort_files_st(file, flag);
 		print_ls(file, flag, DO_TOTAL);
 		if (flag & RR_FLAG)
-			i += for_recursive(file, path, flag);
+			i += for_recursive(file, path, flag, 0);
 	}
 	free(path);
 	free(file);
