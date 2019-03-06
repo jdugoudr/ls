@@ -6,14 +6,32 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 19:24:08 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 19:35:01 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/06 10:31:44 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include <errno.h>
+#include <sys/xattr.h>
+#include <sys/acl.h>
 
-static void	get_data(t_files *file, struct stat st)
+static void	get_attr(t_files *file, char *path)
+{
+	acl_t		acl;
+	acl_entry_t	tmp;
+
+	acl = NULL;
+	acl = acl_get_link_np(path, ACL_TYPE_EXTENDED);
+	if (listxattr(path, NULL, 0, XATTR_NOFOLLOW) > 0)
+		file->attr = '@';
+	else if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &tmp) != -1)
+		file->attr = '+';
+	else
+		file->attr = ' ';
+	free(acl);
+}
+
+static void	get_data(t_files *file, struct stat st, char *path)
 {
 	file->uid = st.st_uid;
 	file->gid = st.st_gid;
@@ -29,12 +47,13 @@ static void	get_data(t_files *file, struct stat st)
 		file->major = major(st.st_rdev);
 		file->minor = minor(st.st_rdev);
 	}
+	get_attr(file, path);
 	file->blocks = st.st_blocks;
 	get_perm(file, st);
 	get_name_user(file);
 }
 
-static void	get_type(t_files *file, struct stat st, char *path)
+static int	get_type(t_files *file, struct stat st, char *path)
 {
 	char	*tmp;
 
@@ -44,7 +63,8 @@ static void	get_type(t_files *file, struct stat st, char *path)
 		file->type = 'd';
 	else if ((st.st_mode & S_IFMT) == S_IFLNK)
 	{
-		tmp = ft_strnew(256);
+		if ((tmp = ft_strnew(256)) == NULL)
+			return (1);
 		readlink(path, tmp, 256);
 		ft_strcpy(file->name_link, tmp);
 		free(tmp);
@@ -58,6 +78,7 @@ static void	get_type(t_files *file, struct stat st, char *path)
 		file->type = 's';
 	else if ((st.st_mode & S_IFMT) == S_IFIFO)
 		file->type = 'p';
+	return (0);
 }
 
 int			new_file(t_files **file, t_data *dt, int *nb_file, char *path)
@@ -68,11 +89,12 @@ int			new_file(t_files **file, t_data *dt, int *nb_file, char *path)
 	(*file)[*nb_file].is_last = 1;
 	ft_strcpy((*file)[*nb_file].name, dt->name);
 	(*file)[*nb_file + 1].is_last = 0;
-	get_type((*file) + *nb_file, dt->st, path);
+	if (get_type((*file) + *nb_file, dt->st, path))
+		return (1);
 	if ((dt->flag & T_FLAG) || (dt->flag & L_FLAG))
 		((*file)[*nb_file]).time = dt->st.st_mtime;
 	if ((dt->flag & L_FLAG))
-		get_data((*file) + *nb_file, dt->st);
+		get_data((*file) + *nb_file, dt->st, path);
 	if ((dt->flag & I_FLAG))
 		(*file)[*nb_file].inode = dt->st.st_ino;
 	*nb_file += 1;

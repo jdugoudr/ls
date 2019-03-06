@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 13:31:06 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 19:41:24 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/06 10:03:49 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,9 @@ static int	read_utils(t_files **file, char *path, short flag, DIR *dir)
 		dt.name = cont_dir->d_name;
 		dt.flag = flag;
 		if ((r = get_stat(file, path, &dt, &nb_file)) == 1)
+		{
 			error_ls(*file);
+		}
 		else if (r == -1)
 			break ;
 	}

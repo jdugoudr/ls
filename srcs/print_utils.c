@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 15:07:04 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 16:31:06 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/06 10:46:50 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,19 @@ off_t	take_bigger(size_t *tab_max, t_files *file)
 	return (total);
 }
 
-ino_t	max_inode(t_files *file)
+int		max_inode(t_files *file)
 {
 	int		i;
-	ino_t	max;
+	int		max;
+	int		tmp;
 
 	i = 0;
 	max = 0;
 	while (file[i].is_last)
 	{
-		if (file[i].inode > max)
-			max = ft_nblen(file[i].inode);
+		tmp = ft_nblen(file[i].inode);
+		if (tmp > max)
+			max = tmp;
 		i++;
 	}
 	return (max);

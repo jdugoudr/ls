@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/03 19:12:31 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 17:35:27 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/06 10:47:56 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char		*norm_date(time_t t)
 
 static void		print_all(t_files f, size_t *tab_max)
 {
-	ft_printf("%c%s%s%s%c", f.type, f.p_use, f.p_gpe, f.p_oth, ' ');
+	ft_printf("%c%s%s%s%c", f.type, f.p_use, f.p_gpe, f.p_oth, f.attr);
 	ft_printf(" %*hu", (int)tab_max[0], f.nlink);
 	if (f.user)
 		ft_printf(" %-*s", (int)tab_max[1], f.user);
@@ -69,22 +69,22 @@ void			print_ls(t_files *file, short flag, int do_total)
 	int		i;
 	size_t	tab_max[4];
 	off_t	total;
-	ino_t	max_i;
+	int		max_i;
 
 	i = 0;
 	init(tab_max);
-	if ((flag & I_FLAG))
+	if (file && (flag & I_FLAG))
 		max_i = max_inode(file);
-	if ((flag & L_FLAG) && file[0].is_last)
+	if (file && (flag & L_FLAG) && file[0].is_last)
 	{
 		total = take_bigger(tab_max, file);
 		if (do_total == DO_TOTAL)
 			ft_printf("total %lu\n", total);
 	}
-	while (file[i].is_last)
+	while (file && file[i].is_last)
 	{
 		if ((flag & I_FLAG))
-			ft_printf("%*llu ", max_i, file[i].inode);
+			ft_printf("%*d ", max_i, file[i].inode);
 		if ((flag & L_FLAG))
 			print_all(file[i], tab_max);
 		else

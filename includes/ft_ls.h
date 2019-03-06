@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:37:14 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 19:07:52 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/06 10:47:50 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct	s_files
 	blkcnt_t	blocks;
 	int			major;
 	int			minor;
+	char		attr;
 	int			is_last;
 }				t_files;
 
@@ -116,7 +117,7 @@ off_t			take_bigger(size_t *tab_max, t_files *file);
 /*
  ** print_utils
 */
-ino_t			max_inode(t_files *file);
+int				max_inode(t_files *file);
 off_t			take_bigger(size_t *tab_max, t_files *file);
 
 /*

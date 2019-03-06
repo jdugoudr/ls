@@ -6,7 +6,7 @@
 /*   By: jdugoudr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 17:46:45 by jdugoudr          #+#    #+#             */
-/*   Updated: 2019/03/05 19:41:52 by jdugoudr         ###   ########.fr       */
+/*   Updated: 2019/03/06 10:25:48 by jdugoudr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ static int	read_params(t_params *p, t_files *file, short flag)
 			ft_printf("%s:\n", p[i].name);
 		else if (p[1].is_last)
 			ft_printf("\n%s:\n", p[i].name);
-		tmp = ft_strjoin(p[i].name, "/");
+		if ((tmp = ft_strjoin(p[i].name, "/")) == NULL)
+			return (1);
 		if ((r += read_dir(creat_new_tab(), tmp, flag)) == 1)
 			error_ls(file);
 		i++;
